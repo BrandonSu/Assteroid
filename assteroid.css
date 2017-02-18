@@ -77,3 +77,7 @@ a {
     right: 0px;
     bottom: -200px;
 }
+
+.overlays{
+			 position:absolute;
+	 }

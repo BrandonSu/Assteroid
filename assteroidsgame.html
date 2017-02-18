@@ -25,19 +25,24 @@ var myGameArea = {
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.frameNo = 0;
         this.interval = setInterval(updateGameArea, 20);
-        },
+
+    },
     clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        },
+    },
     end : function() {
         console.log("crash!");
         var loser = document.createElement("H1").appendChild(document.createTextNode("YOU LOST! Butt you saved", assteroids.length, "assteroids!")); // I don't think this actually ends the game, it just appends an H1 tag to the document
-        document.body.insertBefore(loser, document.body.childNodes[0]);
-        window.location.replace("assteroid.html");
+        document.body.innerHTML = loser;
+        this.done = true;
     } 
 }
 
 function assteroid() {
+    var butt = document.createElement("img");
+    butt.setAttribute('src', 'assteroid_v2.png');
+    butt.setAttribute('class', 'overlays');
+    document.body.appendChild(butt);
     // create assteroid object
     this.x = Math.random() * myGameArea.canvas.width + 100; // x coordinate
     this.y = Math.random() * myGameArea.canvas.height + 100; // y coordinate
@@ -45,16 +50,16 @@ function assteroid() {
     this.speedx = (Math.random() * 2 % 2) === 0 ? Math.floor(Math.random() * 4 + 1) : Math.floor(Math.random() * 4 + 1) * -1; // horizontal speed
     this.speedy = (Math.random() * 2 % 2) === 0 ? Math.floor(Math.random() * 4 + 1) : Math.floor(Math.random() * 4 + 1) * -1;
     this.update = function() { // move and redraw assteroid
-        ctx = myGameArea.context;
-        ctx.beginPath(); // draw circle
-        ctx.arc(this.x, this.y, this.width, 0, Math.PI*2);
-        ctx.closePath();
-        ctx.fillStyle = "#DD95AA"; // color circle
-        ctx.fill();
+        // ctx = myGameArea.context;
+        // ctx.beginPath(); // draw circle
+        // ctx.arc(this.x, this.y, this.width, 0, Math.PI*2);
+        // ctx.closePath();
+        // ctx.fillStyle = "#DD95AA"; // color circle
+        // ctx.fill();
         this.x += this.speedx;
         this.y += this.speedy;
-        ctx.fillStyle = "#DD95AA"; // color circle
-        ctx.fill();
+        butt.style.left = this.x + "px";
+        butt.style.top = this.y + "px";
         // update x and y positions using speedx and speedy 
     }
     this.crashed = function() {
@@ -69,23 +74,23 @@ function assteroid() {
 }
 
 function updateGameArea() {
-    // call this function to avoid leaving trailing paths and test if anything has crashed yet
-    for (i = 0; i < assteroids.length; i += 1) {
-        if (assteroids[i].crashed()) {
-            console.log("crash!");
-            var loser = document.createElement("H1").appendChild(document.createTextNode("YOU LOST!")); // I don't think this actually ends the game, it just appends an H1 tag to the document
-            document.body.insertBefore(loser, document.body.childNodes[0]);
-        } 
-    }
-    myGameArea.clear(); // refresh screen before updating assteroid drawings
-    myGameArea.frameNo += 1; 
-    if (myGameArea.frameNo == 1 || everyinterval(150)) { // every 150 ms draw a new assteroid and add it to our list of assteroids
-        assteroids.push(new assteroid());
-    }
-    if (myGameArea.frameNo === 1) assteroids.push(new assteroid());
-    console.log(assteroids[0].x, assteroids[0].y);
-    for (i = 0; i < assteroids.length; i +=1) {
-        assteroids[i].update(); // update all of our assteroids (change x and y positions)
+    if (!done) {
+        // call this function to avoid leaving trailing paths and test if anything has crashed yet
+        for (i = 0; i < assteroids.length; i += 1) {
+            if (assteroids[i].crashed()) {
+                myGameArea.end();
+            } 
+        }
+        myGameArea.clear(); // refresh screen before updating assteroid drawings
+        myGameArea.frameNo += 1; 
+        if (myGameArea.frameNo == 1 || everyinterval(150)) { // every 150 ms draw a new assteroid and add it to our list of assteroids
+            assteroids.push(new assteroid());
+        }
+        if (myGameArea.frameNo === 1) assteroids.push(new assteroid());
+        console.log(assteroids[0].x, assteroids[0].y);
+        for (i = 0; i < assteroids.length; i +=1) {
+            assteroids[i].update(); // update all of our assteroids (change x and y positions)
+        }
     }
 }
 
