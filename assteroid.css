@@ -1,0 +1,24 @@
+h1 {
+	background-color: white;
+	color: rgb(41,38,100);
+	font-family: 'VT323', monospace;
+	text-align: center;
+	font-size: 450%;
+}
+h1:hover {
+	background-color: rgb(38,106,167);
+}
+p {
+	color: red;
+}
+body {
+	background-image: url("background.jpg");
+}
+#head {
+	width: 60%;
+	/*text-align: center;*/
+	/*border: 5px solid orange;*/
+	/*background-color:white;*/
+	margin: auto;
+	/*padding:50px;*/
+}
