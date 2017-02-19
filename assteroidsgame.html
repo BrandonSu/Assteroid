@@ -96,6 +96,7 @@ function updateGameArea() {
         // call this function to avoid leaving trailing paths and test if anything has crashed yet
         for (i = 0; i < assteroids.length; i += 1) {
             if (assteroids[i].crashed()) {
+                alert("You lost!");
                 myGameArea.end();
             } 
         }
