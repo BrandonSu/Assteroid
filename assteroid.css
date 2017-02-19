@@ -81,3 +81,7 @@ a {
 .overlays{
 			 position:absolute;
 	 }
+
+canvas {
+	border: solid white 10px;
+}
