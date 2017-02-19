@@ -33,9 +33,8 @@ var myGameArea = {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     },
     end : function() {
-        var loser = document.createElement("H1").appendChild(document.createTextNode("YOU LOST! Butt you saved", assteroids.length, "assteroids!")); // I don't think this actually ends the game, it just appends an H1 tag to the document
-        document.body.innerHTML = loser;
-        this.done = true;
+        console.log("replace");
+        window.location = "https://www.plannedparenthood.org/educators/implementing-sex-education";
     } 
 }
 
@@ -45,14 +44,14 @@ function assteroid() {
     butt.setAttribute('src', 'assteroid_v2.png');
     butt.setAttribute('class', 'overlays');
     butt.setAttribute('id', index);
+    $(butt).css('transform', 'rotate(' + 180 + 'deg)');
     index++;
     document.body.appendChild(butt);
-    this.x = Math.random() * myGameArea.canvas.width + 100; // x coordinate
+    this.x = -99; // x coordinate
     this.y = Math.random() * myGameArea.canvas.height + 100; // y coordinate
     this.width = Math.random() * 100 + 150;
     butt.setAttribute('width', this.width);
-    this.speedx = (Math.random() * 2 % 2) === 0 ? Math.floor(Math.random() * 4 + 1) : Math.floor(Math.random() * 4 + 1) * -1; // horizontal speed
-    this.speedy = (Math.random() * 2 % 2) === 0 ? Math.floor(Math.random() * 4 + 1) : Math.floor(Math.random() * 4 + 1) * -1;
+    this.speedx = Math.floor(Math.random() * 5) + 2; // horizontal speed
     this.update = function() { // move and redraw assteroid
         this.x += this.speedx;
         //this.y += this.speedy;
@@ -63,16 +62,17 @@ function assteroid() {
     this.crashed = function() {
         // return true or false based on size and position... not very reliable
         for (i = 0; i < assteroids.length - 1; i += 1) {
-            if (assteroids[i].x + assteroids[i].width > myGameArea.canvas.width || assteroids[i].x < 0 || assteroids[i].y + assteroids[i].width > myGameArea.canvas.height || assteroids[i].y < 0) {
-                myGameArea.end();
+            if (assteroids[i].x + assteroids[i].width > myGameArea.canvas.width || assteroids[i].x < -1 * assteroids[i].width) {
+                return true;
             }
         }
         return false;
     }
+    var that = this;
     butt.onclick = function() {
-        angle = 180;
-        console.log("hi!", this);
+        angle = getRotationDegrees($(this)) + 180;
         $(this).css('transform', 'rotate(' + angle + 'deg)');
+        that.speedx = -that.speedx;
     }
 }
 
@@ -94,11 +94,11 @@ function getRotationDegrees(obj) {
 function updateGameArea() {
     if (!done) {
         // call this function to avoid leaving trailing paths and test if anything has crashed yet
-        /*for (i = 0; i < assteroids.length; i += 1) {
+        for (i = 0; i < assteroids.length; i += 1) {
             if (assteroids[i].crashed()) {
                 myGameArea.end();
             } 
-        }*/
+        }
         myGameArea.clear(); // refresh screen before updating assteroid drawings
         myGameArea.frameNo += 1; 
         if (myGameArea.frameNo == 1 || everyinterval(100)) { // every 150 ms draw a new assteroid and add it to our list of assteroids
